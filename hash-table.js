@@ -29,18 +29,15 @@ class HashTable {
   }
 
   insertNoCollisions(key, value) {
-    // let idx = this.hashMod(key);
-    // let newData = new KeyValuePair(key, value);
-    // if (
-    //   this.data[idx] !== null ||
-    //   this.data[idx].key === key ||
-    //   this.data[idx].value === value
-    //   )
-    // {
-    //   throw Error("hash collision or same key/value pair already exists!");
-    // }
-    // this.data[idx] = newData;
-    // this.count++;
+    let idx = this.hashMod(key);
+    let newData = new KeyValuePair(key, value);
+
+    if (this.data[idx]) {
+      throw Error("hash collision or same key/value pair already exists!");
+    }
+
+    this.data[idx] = newData;
+    this.count++;
   }
 
   insertWithHashCollisions(key, value) {
@@ -64,57 +61,66 @@ class HashTable {
     let idx = this.hashMod(key),
       // create a new data object
       newData = new KeyValuePair(key, value),
-      // will return null if index is not occupied
-      // else will return the object
+      // data at current index
       oldData = this.data[idx];
 
+    // if no data occpied, we place newData
     if (!oldData) {
       this.data[idx] = newData;
+      this.count++;
+      return;
     }
-    else if (key in oldData) {
-      if (oldData[key] === value) {
-        throw Error("");
-      }
 
+    // if occupied, we check the key and value
+    // we throw error for duplicate key and value
+    // if same key but different value we update value
+    if (oldData.key === key && oldData.value === value) {
+      throw Error("hash collision or same key/value pair already exists!");
+    } else if (oldData.key === key && oldData.value !== value) {
       this.data[idx].value = value;
       return;
     }
-    else if (oldData.next) {
-      if (key in oldData.next) {
-        if (oldData.next[key] === value) {
-          throw Error('');
-        }
 
-        this.data[idx].next.value = value;
-        return
+    // if occupied, we check the for linked data before we link the new data
+    if (oldData.next) {
+      if (oldData.next.key === key && oldData.next.value === value) {
+        throw Error("hash collision or same key/value pair already exists!");
+      } else if (oldData.next.key === key && oldData.next.value !== value) {
+        // if same key but different value
+        oldData.next.value = value;
+        return;
       }
 
+      // if no update needed or duplicate detected, we link old-data to new data
       newData.next = oldData;
       this.data[idx] = newData;
     }
 
+    newData.next = oldData;
+    this.data[idx] = newData;
     this.count++;
   }
 }
 
+
 let hashTable = new HashTable(2);
 
 hashTable.insert("key-1", "val-1");
-// hashTable.insert("key-2", "val-2");
-// hashTable.insert("key-3", "val-3");
-// hashTable.insert("key-1", "val-100000");
+hashTable.insert("key-2", "val-2");
+hashTable.insert("key-3", "val-3");
+hashTable.insert("key-1", "val-100000");
 
-// console.log(hashTable)
+console.log(hashTable)
 console.log(hashTable.data[0]);
 console.log(hashTable.count);
 
-// console.log(hashTable.data[0].key);
-// console.log(hashTable.data[0].value);
+console.log(hashTable.data[0].key);
+console.log(hashTable.data[0].value);
 
-// console.log(hashTable.data[1].key)
-// console.log(hashTable.data[1].value)
+console.log(hashTable.data[1].key)
+console.log(hashTable.data[1].value)
 
-// console.log(hashTable.data[0].next.key);
-// console.log(hashTable.data[0].next.value);
+console.log(hashTable.data[0].next.key);
+console.log(hashTable.data[0].next.value);
 
 module.exports = HashTable;
