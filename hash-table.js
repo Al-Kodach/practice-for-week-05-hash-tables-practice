@@ -69,24 +69,4 @@ class HashTable {
 }
 
 
-let hashTable = new HashTable(2);
-
-// hashTable.insert("key-1", "val-1");
-// hashTable.insert("key-2", "val-2");
-// hashTable.insert("key-3", "val-3");
-// hashTable.insert("key-1", "val-100000");
-
-// console.log(hashTable)
-// console.log(hashTable.data[0]);
-// console.log(hashTable.count);
-
-// console.log(hashTable.data[0].key);
-// console.log(hashTable.data[0].value);
-
-// console.log(hashTable.data[1].key)
-// console.log(hashTable.data[1].value)
-
-// console.log(hashTable.data[0].next.key);
-// console.log(hashTable.data[0].next.value);
-
 module.exports = HashTable;
